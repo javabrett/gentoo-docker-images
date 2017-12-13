@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/gentoo/gentoo-docker-images.svg?branch=master)](https://travis-ci.org/gentoo/gentoo-docker-images)
 
+Trivial change, Travis PR testing.
+
 A collection of Dockerfiles for generating Gentoo docker images.
 
 These images are intended to be created automatically by
