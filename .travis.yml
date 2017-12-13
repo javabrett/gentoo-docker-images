@@ -25,11 +25,15 @@ script:
     sudo docker run -it --rm ${ORG}/${TARGET}:${VERSION} /bin/bash -c "emerge --info" ;
     fi
 
-# Travis is set up to push daily to dockerhub
+# Travis is set up to push master daily to dockerhub, non-PR branches on push
 after_success:
-  - if [[ "${TRAVIS_PULL_REQUEST_BRANCH:-${TRAVIS_BRANCH}}" == "master" && "${TRAVIS_EVENT_TYPE}" == "cron" ]]; then
-    VERSION=$(date -u +%Y%m%d);
-    docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}";
-    docker push "${ORG}/${TARGET}:latest";
-    docker push "${ORG}/${TARGET}:${VERSION}";
+  - if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
+      docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}";
+      if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_EVENT_TYPE}" == "cron" ]]; then
+        VERSION=$(date -u +%Y%m%d);
+        docker push "${ORG}/${TARGET}:latest";
+        docker push "${ORG}/${TARGET}:${VERSION}";
+      else
+        docker push "${ORG}/${TARGET}:${TRAVIS_BRANCH}";
+      fi
     fi

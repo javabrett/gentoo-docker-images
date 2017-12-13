@@ -33,4 +33,8 @@ if [[ -n "${SUFFIX}" ]]; then
 fi
 
 docker build --build-arg ARCH="${ARCH}" --build-arg MICROARCH="${MICROARCH}" --build-arg BOOTSTRAP="${BOOTSTRAP}" --build-arg SUFFIX="${SUFFIX}"  -t "${ORG}/${TARGET}:${VERSION}" -f "${NAME}.Dockerfile" .
-docker tag "${ORG}/${TARGET}:${VERSION}" "${ORG}/${TARGET}:latest"
+if [[ "${TRAVIS_BRANCH}" == "master" ]]; then
+  docker tag "${ORG}/${TARGET}:${VERSION}" "${ORG}/${TARGET}:latest"
+else
+  docker tag "${ORG}/${TARGET}:${VERSION}" "${ORG}/${TARGET}:${TRAVIS_BRANCH}"
+fi
